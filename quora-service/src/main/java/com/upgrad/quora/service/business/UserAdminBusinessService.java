@@ -42,6 +42,7 @@ public class UserAdminBusinessService {
             return userEntity;
         }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public UserEntity deleteUser(final String userUuid, final String authorizationToken) throws UserNotFoundException,
             AuthorizationFailedException {
 
@@ -60,6 +61,12 @@ public class UserAdminBusinessService {
         if ( userEntity == null) {
             throw new UserNotFoundException("USR-001", "User with entered uuid does not exist");
         }
+
+        if(userEntity.getRole() == "nonadmin"){
+            throw  new AuthorizationFailedException("ATHR-003","Unauthorized Access, Entered user is not an admin");
+        }
+
+        userDao.deleteUser(userEntity);
         return userEntity;
     }
 
