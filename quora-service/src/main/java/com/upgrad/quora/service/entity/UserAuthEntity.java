@@ -28,6 +28,13 @@ public class UserAuthEntity implements Serializable {
     @JoinColumn(name = "USER_ID")
     private UserEntity user;
 
+
+
+    @Column(name = "UUID")
+    @NotNull
+    @Size(max = 200)
+    private String uuid;
+
     @Column(name = "ACCESS_TOKEN")
     @NotNull
     @Size(max = 500)
@@ -52,6 +59,13 @@ public class UserAuthEntity implements Serializable {
         this.id = id;
     }
 
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
     public UserEntity getUser() {
         return user;
     }
