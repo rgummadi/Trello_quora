@@ -42,5 +42,26 @@ public class UserAdminBusinessService {
             return userEntity;
         }
 
+    public UserEntity deleteUser(final String userUuid, final String authorizationToken) throws UserNotFoundException,
+            AuthorizationFailedException {
+
+
+        UserAuthEntity userAuthEntity = userDao.getUserAuthToken(authorizationToken);
+        if (userAuthEntity == null) {
+            throw  new AuthorizationFailedException("ATHR-001","User has not signed in");
+        }
+
+        ZonedDateTime logoutTime = userAuthEntity.getLogoutAt();
+        if (logoutTime != null) {
+            throw  new AuthorizationFailedException("ATHR-002","User is signed out.Sign in first to get user details");
+        }
+
+        UserEntity userEntity = userDao.getUserByUuid(userUuid);
+        if ( userEntity == null) {
+            throw new UserNotFoundException("USR-001", "User with entered uuid does not exist");
+        }
+        return userEntity;
+    }
+
 
 }
