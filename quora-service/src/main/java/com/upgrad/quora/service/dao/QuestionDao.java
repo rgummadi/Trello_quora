@@ -39,4 +39,16 @@ public class QuestionDao {
     public void updateQuestion(final QuestionEntity updatedQuestionEntity) {
         entityManager.merge(updatedQuestionEntity);
     }
+
+    public void deleteQuestion(final QuestionEntity questionEntity) {
+        entityManager.remove(questionEntity);
+    }
+
+    public List getAllQuestionsByUser(UserEntity userEntity) {
+        try {
+            return entityManager.createNamedQuery("allQuestionsByUser", QuestionEntity.class).setParameter("user", userEntity).getResultList();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
 }

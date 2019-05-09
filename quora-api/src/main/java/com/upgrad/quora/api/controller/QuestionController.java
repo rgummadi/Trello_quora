@@ -4,7 +4,7 @@ import com.upgrad.quora.api.model.QuestionEditRequest;
 import com.upgrad.quora.api.model.QuestionResponse;
 import com.upgrad.quora.api.model.QuestionEditResponse;
 import com.upgrad.quora.api.model.QuestionDetailsResponse;
-
+import com.upgrad.quora.api.model.QuestionDeleteResponse;
 
 import com.upgrad.quora.service.business.AuthenticationService;
 import com.upgrad.quora.service.business.QuestionAnswerService;
@@ -47,6 +47,7 @@ public class QuestionController {
         return new ResponseEntity<QuestionResponse>(questionResponse, HttpStatus.CREATED);
     }
 
+    //Get all questions
     @RequestMapping(method = RequestMethod.GET, path = "/question/all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<QuestionDetailsResponse>> getAllQuestions(@RequestHeader("authorization") final String authorization) throws AuthorizationFailedException {
 
@@ -62,17 +63,44 @@ public class QuestionController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/question/edit/{questionId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<QuestionEditResponse> editQuestionContent(@PathVariable("questionId") final String userUuid,
+    public ResponseEntity<QuestionEditResponse> editQuestionContent(@PathVariable("questionId") final String questionUuid,
                                                        @RequestHeader("authorization") final String authorization,final QuestionEditRequest questionEditRequest) throws AuthorizationFailedException, InvalidQuestionException {
 
 
 
-        final QuestionEntity questionEntity = questionAnswerService.editQuestion(userUuid, authorization,questionEditRequest.getContent());
+        final QuestionEntity questionEntity = questionAnswerService.editQuestion(questionUuid, authorization,questionEditRequest.getContent());
 
 
         QuestionEditResponse questionEditResponse = new QuestionEditResponse().id(questionEntity.getUuid()).status("QUESTION EDITED");
         return new ResponseEntity<QuestionEditResponse>(questionEditResponse, HttpStatus.OK);
     }
 
+
+    @RequestMapping(method = RequestMethod.DELETE, path = "/question/delete/{questionId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<QuestionDeleteResponse> deleteQuestion(@PathVariable("questionId") final String userUuid,
+                                                         @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException,InvalidQuestionException {
+
+        final QuestionEntity questionEntity = questionAnswerService.deleteQuestion(userUuid, authorization);
+        QuestionDeleteResponse questionDeleteResponse = new QuestionDeleteResponse().id(questionEntity.getUuid()).status("QUESTION DELETED");
+        return new ResponseEntity<QuestionDeleteResponse>(questionDeleteResponse, HttpStatus.OK);
+    }
+
+    //Get all questions by user
+
+    @RequestMapping(method = RequestMethod.GET, path = "question/all/{userId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<List<QuestionDetailsResponse>> getAllQuestionsByUser(@RequestHeader("authorization") final String authorization,@PathVariable("userId") final String userUuid)
+            throws AuthorizationFailedException,UserNotFoundException {
+
+        final List questions = questionAnswerService.getAllQuestionsByUser(authorization,userUuid);
+
+        List<QuestionDetailsResponse> qresponses = new ArrayList<QuestionDetailsResponse>();
+        for( Object question:questions){
+            QuestionEntity q = (QuestionEntity)question;
+            QuestionDetailsResponse questionDetailsResponse = new QuestionDetailsResponse().id(q.getUuid()).content(q.getContent());
+            qresponses.add(questionDetailsResponse);
+        }
+
+        return new ResponseEntity<List<QuestionDetailsResponse>>(qresponses, HttpStatus.OK);
+    }
 
 }

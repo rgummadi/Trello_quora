@@ -27,6 +27,7 @@ public class QuestionAnswerService {
     @Autowired
     private QuestionDao questionDao;
 
+    //Create Question
     @Transactional(propagation = Propagation.REQUIRED)
     public QuestionEntity createQuestion(QuestionEntity questionEntity, final String authorizationToken)
             throws AuthorizationFailedException {
@@ -49,6 +50,7 @@ public class QuestionAnswerService {
         return questionEntity;
     }
 
+    //Get All Questions
     @Transactional(propagation = Propagation.REQUIRED)
     public List<QuestionEntity> getAllQuestions(final String authToken) throws AuthorizationFailedException {
 
@@ -70,6 +72,7 @@ public class QuestionAnswerService {
 
     }
 
+    //Edit question
     @Transactional(propagation = Propagation.REQUIRED)
     public QuestionEntity editQuestion(final String questionUuid, final String authToken, final String content) throws AuthorizationFailedException,InvalidQuestionException {
 
@@ -86,20 +89,78 @@ public class QuestionAnswerService {
         UserEntity userEntity = userAuthEntity.getUser();
 
         QuestionEntity questionEntity = questionDao.getQuestionByUuid(questionUuid);
-        questionEntity.setContent(content);
+
 
         if(questionEntity == null){
-            throw  new AuthorizationFailedException("ATHR-002","User is signed out.Sign in first to edit the question");
-        }
-
-        if(userEntity.getId() != questionEntity.getUser().getId()) {
             throw new InvalidQuestionException("QUES-001","Entered question uuid does not exist");
         }
 
+        if(userEntity.getId() != questionEntity.getUser().getId()) {
+            throw  new AuthorizationFailedException("ATHR-003","Only the question owner can edit the question");
+        }
+
         //update question in database
+        questionEntity.setContent(content);
         questionDao.updateQuestion(questionEntity);
 
         return questionEntity;
     }
 
+
+    //Delete Question
+    @Transactional(propagation = Propagation.REQUIRED)
+    public QuestionEntity deleteQuestion(final String questionUuid, final String authToken) throws InvalidQuestionException,
+            AuthorizationFailedException {
+
+
+        UserAuthEntity userAuthEntity = userDao.getUserAuthToken(authToken);
+        if (userAuthEntity == null) {
+            throw  new AuthorizationFailedException("ATHR-001","User has not signed in");
+        }
+
+        ZonedDateTime logoutTime = userAuthEntity.getLogoutAt();
+        if (logoutTime != null) {
+            throw  new AuthorizationFailedException("ATHR-002","User is signed out.Sign in first to delete a question");
+        }
+
+        QuestionEntity questionEntity = questionDao.getQuestionByUuid(questionUuid);
+        if ( questionEntity == null) {
+            throw new InvalidQuestionException("QUES-001", "Entered question uuid does not exist");
+        }
+
+        if(userAuthEntity.getUser().getRole() == "nonadmin" && userAuthEntity.getUser().getId() != questionEntity.getUser().getId()){
+            throw  new AuthorizationFailedException("ATHR-003","Only the question owner or admin can delete the question");
+        }
+
+        questionDao.deleteQuestion(questionEntity);
+        return questionEntity;
+    }
+
+    //Get All Questions By User
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<QuestionEntity> getAllQuestionsByUser(final String authToken, final String userUuid) throws AuthorizationFailedException, UserNotFoundException {
+
+        UserAuthEntity userAuthEntity = userDao.getUserAuthToken(authToken);
+        if (userAuthEntity == null) {
+            throw  new AuthorizationFailedException("ATHR-001","User has not signed in");
+        }
+
+        ZonedDateTime logoutTime = userAuthEntity.getLogoutAt();
+        if (logoutTime != null) {
+            throw  new AuthorizationFailedException("ATHR-002","User is signed out.Sign in first to get all questions posted by a specific user");
+        }
+
+        //Get user from uuid
+        UserEntity userEntity = userDao.getUserByUuid(userUuid);
+        if (userEntity == null) {
+            throw  new UserNotFoundException("ATHR-003","User with entered uuid whose question details are to be seen does not exist");
+        }
+
+        List questions = questionDao.getAllQuestionsByUser(userEntity);
+
+
+        return questions;
+
+
+    }
 }
