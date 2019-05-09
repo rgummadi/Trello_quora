@@ -1,6 +1,8 @@
 C:\Users\hcl_rgum\Documents\blockchaincourse\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\business\AuthenticationService.java
 C:\Users\hcl_rgum\Documents\blockchaincourse\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\business\PasswordCryptographyProvider.java
+C:\Users\hcl_rgum\Documents\blockchaincourse\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\entity\QuestionEntity.java
 C:\Users\hcl_rgum\Documents\blockchaincourse\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\common\UnexpectedException.java
+C:\Users\hcl_rgum\Documents\blockchaincourse\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\business\QuestionAnswerService.java
 C:\Users\hcl_rgum\Documents\blockchaincourse\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\business\SignupBusinessService.java
 C:\Users\hcl_rgum\Documents\blockchaincourse\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\common\ErrorCode.java
 C:\Users\hcl_rgum\Documents\blockchaincourse\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\entity\UserAuthEntity.java
@@ -14,6 +16,8 @@ C:\Users\hcl_rgum\Documents\blockchaincourse\Trello_quora\quora-service\src\main
 C:\Users\hcl_rgum\Documents\blockchaincourse\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\exception\SignUpRestrictedException.java
 C:\Users\hcl_rgum\Documents\blockchaincourse\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\dao\UserDao.java
 C:\Users\hcl_rgum\Documents\blockchaincourse\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\exception\AuthorizationFailedException.java
+C:\Users\hcl_rgum\Documents\blockchaincourse\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\entity\AnswerEntity.java
 C:\Users\hcl_rgum\Documents\blockchaincourse\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\exception\AnswerNotFoundException.java
+C:\Users\hcl_rgum\Documents\blockchaincourse\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\dao\QuestionDao.java
 C:\Users\hcl_rgum\Documents\blockchaincourse\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\entity\UserEntity.java
 C:\Users\hcl_rgum\Documents\blockchaincourse\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\exception\UserNotFoundException.java
