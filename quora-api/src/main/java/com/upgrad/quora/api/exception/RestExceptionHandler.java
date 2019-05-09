@@ -45,4 +45,11 @@ public class RestExceptionHandler {
                 new ErrorResponse().code(exe.getCode()).message(exe.getErrorMessage()), HttpStatus.UNAUTHORIZED
         );
     }
+
+    @ExceptionHandler(InvalidQuestionException.class)
+    public ResponseEntity<ErrorResponse> invalidQuestionException(InvalidQuestionException exe, WebRequest request) {
+        return new ResponseEntity<ErrorResponse>(
+                new ErrorResponse().code(exe.getCode()).message(exe.getErrorMessage()), HttpStatus.UNAUTHORIZED
+        );
+    }
 }
