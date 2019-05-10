@@ -225,5 +225,61 @@ public class QuestionAnswerService {
         return answerEntity;
     }
 
+    //Delete Answer
+    @Transactional(propagation = Propagation.REQUIRED)
+    public AnswerEntity deleteAnswer(final String answerUuid, final String authToken) throws AnswerNotFoundException,
+            AuthorizationFailedException {
 
+
+        UserAuthEntity userAuthEntity = userDao.getUserAuthToken(authToken);
+        if (userAuthEntity == null) {
+            throw  new AuthorizationFailedException("ATHR-001","User has not signed in");
+        }
+
+        ZonedDateTime logoutTime = userAuthEntity.getLogoutAt();
+        if (logoutTime != null) {
+            throw  new AuthorizationFailedException("ATHR-002","User is signed out.Sign in first to delete an answer");
+        }
+
+        AnswerEntity answerEntity = questionDao.getAnswerByUuid(answerUuid);
+        if ( answerEntity == null) {
+            throw new AnswerNotFoundException("QUES-001", "Entered answer uuid does not exist");
+        }
+
+        if(userAuthEntity.getUser().getRole() == "nonadmin" && userAuthEntity.getUser().getId() != answerEntity.getUser().getId()){
+            throw  new AuthorizationFailedException("ATHR-003","Only the answer owner or admin can delete the answer");
+        }
+
+        questionDao.deleteAnswer(answerEntity);
+        return answerEntity;
+    }
+
+    //Get All answers By Question
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<AnswerEntity> getAllAnswersByQuestion(final String authToken, final String questionUuid)
+            throws AuthorizationFailedException, InvalidQuestionException {
+
+        UserAuthEntity userAuthEntity = userDao.getUserAuthToken(authToken);
+        if (userAuthEntity == null) {
+            throw  new AuthorizationFailedException("ATHR-001","User has not signed in");
+        }
+
+        ZonedDateTime logoutTime = userAuthEntity.getLogoutAt();
+        if (logoutTime != null) {
+            throw  new AuthorizationFailedException("ATHR-002","User is signed out.Sign in first to get the answers");
+        }
+
+        //Get user from uuid
+       QuestionEntity questionEntity = questionDao.getQuestionByUuid(questionUuid);
+        if (questionEntity == null) {
+            throw  new InvalidQuestionException("QUES-001","The question with entered uuid whose details are to be seen does not exist");
+        }
+
+        List answers = questionDao.getAllAnswersByQuestion(questionEntity);
+
+
+        return answers;
+
+
+    }
 }

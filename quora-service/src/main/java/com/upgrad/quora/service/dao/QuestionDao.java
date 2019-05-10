@@ -69,4 +69,16 @@ public class QuestionDao {
     public void updateAnswer(final AnswerEntity updatedAnswerEntity) {
         entityManager.merge(updatedAnswerEntity);
     }
+
+    public void deleteAnswer(final AnswerEntity answerEntity) {
+        entityManager.remove(answerEntity);
+    }
+
+    public List getAllAnswersByQuestion(QuestionEntity questionEntity) {
+        try {
+            return entityManager.createNamedQuery("allAnswersByQuestion", AnswerEntity.class).setParameter("question", questionEntity).getResultList();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
 }
