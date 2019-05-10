@@ -13,6 +13,13 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "answer", schema = "public")
+@NamedQueries(
+        {
+                @NamedQuery(name = "allAnswers", query = "select q from AnswerEntity q"),
+                @NamedQuery(name = "answerByUuid", query = "select q from AnswerEntity q where q.uuid = :uuid"),
+                @NamedQuery(name = "allAnswersByUser", query = "select q from AnswerEntity q where q.user = :user")
+        }
+)
 public class AnswerEntity implements Serializable {
 
     @Id
@@ -28,9 +35,10 @@ public class AnswerEntity implements Serializable {
     @Column(name = "ANS")
     @NotNull
     @Size(max = 255)
-    private String content;
+    private String ans;
 
     @Column(name = "DATE")
+    @NotNull
     private LocalDateTime date;
 
     @ManyToOne
@@ -57,12 +65,12 @@ public class AnswerEntity implements Serializable {
         this.uuid = uuid;
     }
 
-    public String getContent() {
-        return content;
+    public String getAns() {
+        return ans;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setAns(String ans) {
+        this.ans = ans;
     }
 
     public LocalDateTime getDate() {
@@ -99,8 +107,4 @@ public class AnswerEntity implements Serializable {
         return new HashCodeBuilder().append(this).hashCode();
     }
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
-    }
 }

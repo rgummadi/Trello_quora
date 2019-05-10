@@ -1,5 +1,6 @@
 package com.upgrad.quora.service.dao;
 
+import com.upgrad.quora.service.entity.AnswerEntity;
 import com.upgrad.quora.service.entity.QuestionEntity;
 import com.upgrad.quora.service.entity.UserEntity;
 import org.springframework.stereotype.Repository;
@@ -50,5 +51,22 @@ public class QuestionDao {
         } catch (NoResultException nre) {
             return null;
         }
+    }
+
+    public AnswerEntity createAnswer(AnswerEntity answerEntity) {
+        entityManager.persist(answerEntity);
+        return answerEntity;
+    }
+
+    public AnswerEntity getAnswerByUuid(final String answerUuid) {
+        try {
+            return entityManager.createNamedQuery("answerByUuid", AnswerEntity.class).setParameter("uuid", answerUuid).getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
+    public void updateAnswer(final AnswerEntity updatedAnswerEntity) {
+        entityManager.merge(updatedAnswerEntity);
     }
 }

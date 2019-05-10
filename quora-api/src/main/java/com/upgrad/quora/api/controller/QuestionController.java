@@ -62,6 +62,7 @@ public class QuestionController {
         return new ResponseEntity<List<QuestionDetailsResponse>>(qresponses, HttpStatus.OK);
     }
 
+    //Edit question
     @RequestMapping(method = RequestMethod.PUT, path = "/question/edit/{questionId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<QuestionEditResponse> editQuestionContent(@PathVariable("questionId") final String questionUuid,
                                                        @RequestHeader("authorization") final String authorization,final QuestionEditRequest questionEditRequest) throws AuthorizationFailedException, InvalidQuestionException {
