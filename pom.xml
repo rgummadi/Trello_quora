@@ -10,6 +10,13 @@
 
     <packaging>pom</packaging>
 
+    <properties>
+        <sql-maven-plugin.version>1.5</sql-maven-plugin.version>
+        <postgresql.driver.version>42.2.2</postgresql.driver.version>
+        <postgresql.driver.name>org.postgresql.Driver</postgresql.driver.name>
+        <sql.path>${basedir}/src/main/resources/sql</sql.path>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -40,6 +47,12 @@
             <artifactId>spring-context</artifactId>
             <version>5.0.8.RELEASE</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.driver.version}</version>
         </dependency>
     </dependencies>
 

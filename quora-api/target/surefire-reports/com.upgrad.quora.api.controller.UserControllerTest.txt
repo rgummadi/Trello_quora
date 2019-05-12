@@ -1,0 +1,12 @@
+-------------------------------------------------------------------------------
+Test set: com.upgrad.quora.api.controller.UserControllerTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 9.611 s <<< FAILURE! - in com.upgrad.quora.api.controller.UserControllerTest
+signupWithRepeatedEmail(com.upgrad.quora.api.controller.UserControllerTest)  Time elapsed: 0.708 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<409> but was:<403>
+	at com.upgrad.quora.api.controller.UserControllerTest.signupWithRepeatedEmail(UserControllerTest.java:36)
+
+signupWithRepeatedUserName(com.upgrad.quora.api.controller.UserControllerTest)  Time elapsed: 0.042 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<409> but was:<403>
+	at com.upgrad.quora.api.controller.UserControllerTest.signupWithRepeatedUserName(UserControllerTest.java:28)
+
